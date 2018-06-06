@@ -1,0 +1,43 @@
+package: github.com/ashleyschuett/gce-ingress-backend-services
+import:
+- package: github.com/golang/glog
+- package: golang.org/x/net
+  subpackages:
+  - context
+- package: golang.org/x/oauth2
+  subpackages:
+  - google
+- package: google.golang.org/api
+  subpackages:
+  - compute/v1
+- package: k8s.io/api
+  version: kubernetes-1.12.0-alpha.0
+  subpackages:
+  - core/v1
+  - extensions/v1beta1
+- package: k8s.io/apimachinery
+  version: kubernetes-1.12.0-alpha.0
+  subpackages:
+  - pkg/api/errors
+  - pkg/util/runtime
+  - pkg/util/wait
+- package: k8s.io/client-go
+  version: kubernetes-1.12.0-alpha.0
+  subpackages:
+  - informers
+  - kubernetes
+  - kubernetes/scheme
+  - kubernetes/typed/core/v1
+  - listers/extensions/v1beta1
+  - plugin/pkg/client/auth/gcp
+  - rest
+  - tools/cache
+  - tools/clientcmd
+  - tools/record
+  - util/workqueue
+- package: k8s.io/ingress-gce
+  subpackages:
+  - pkg/controller
+- package: github.com/emicklei/go-restful
+  version: ~2.7.1
+- package: github.com/go-openapi/spec

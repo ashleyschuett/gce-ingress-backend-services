@@ -1,0 +1,39 @@
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: test
+  annotations:
+     cloud.google.com/service-settings: |
+       {
+           "*": {
+              "timeoutSec": 321
+           },
+          "foo.bar.com/foo": {
+               "timeoutSec": 123,
+               "iap": {
+                   "enabled": true,
+                   "oauth2ClientId": "....",
+                   "oauth2ClientSecret":"..."
+                }
+           },
+          "foo.bar.com/bar/*":{
+               "enableCDN": true
+          }
+       }
+spec:
+  backend:
+    serviceName: s0
+    servicePort: 80
+  rules:
+  - host: foo.bar.com
+    http:
+      paths:
+      - path: /foo
+        backend:
+          serviceName: s1
+          servicePort: 80
+      - path: /bar/*
+        backend:
+          serviceName: s2
+          servicePort: 80

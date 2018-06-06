@@ -1,0 +1,21 @@
+---
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  namespace: kube-system
+  name: gce-backend-service-ingress-controller
+  labels:
+    app: gce-backend-service-ingress-controller
+spec:
+  selector:
+    matchLabels:
+      app: gce-backend-service-ingress-controller
+  template:
+    metadata:
+      labels:
+        app: gce-backend-service-ingress-controller
+    spec:
+      containers:
+        - name: gce-backend-service-ingress-controller
+          image: ashleyschuett/gce-ingress-backend-service:v0.0.1
+          imagePullPolicy: IfNotPresent
