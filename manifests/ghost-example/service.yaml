@@ -1,0 +1,16 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: ghost-gce
+  name: ghost-gce
+spec:
+  externalTrafficPolicy: Cluster
+  ports:
+  - port: 2368
+    protocol: TCP
+    targetPort: 2368
+  selector:
+    app: ghost-gce
+  type: NodePort

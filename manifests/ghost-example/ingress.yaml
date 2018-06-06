@@ -1,0 +1,16 @@
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: test
+  annotations:
+     cloud.google.com/service-settings: |
+       {
+           "*": {
+              "timeoutSec": 60
+           }
+       }
+spec:
+  backend:
+    serviceName: ghost-gce
+    servicePort: 2368
