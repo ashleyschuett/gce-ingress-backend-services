@@ -37,14 +37,6 @@ import (
 
 const controllerAgentName = "gce-backend-ingress-controller"
 
-// const (
-// 	// SuccessSynced is used as part of the Event 'reason' when a Ingress is synced
-// 	SuccessSynced = "Synced"
-// 	// ErrResourceExists is used as part of the Event 'reason' when a Ingress fails
-// 	// to sync due to a Deployment of the same name already existing.
-// 	ErrResourceExists = "ErrResourceExists"
-// )
-
 // Controller is the controller implementation for Database resources
 type Controller struct {
 	// kubeclientset is a standard kubernetes clientset
@@ -360,20 +352,26 @@ func (c *Controller) updateBackend(ingress *extensions.Ingress, urlmap *googleV1
 }
 
 // updateBackends checks for the default backend on the ingress and updates
-// the corresponding default backend in gce, then does the same thing for
-// each ingress backend under rules
+// the corresponding default backend in gce, then looks for settings associated
+// with each ingress backend under rules, and updates the gcp backend
 func (c *Controller) updateBackends(ingress *extensions.Ingress, urlmap *googleV1.UrlMap, settings string) error {
 	glog.V(8).Info("Attempting to update ingresses backend services in google cloud... ")
 
 	hasErrors := false
-	err := c.updateBackend(ingress, urlmap, settings, "*", extensions.HTTPIngressPath{"", *ingress.Spec.Backend})
-	if err != nil {
-		hasErrors = true
-		glog.Error(err)
+	if ingress.Spec.Backend != nil {
+		err := c.updateBackend(ingress, urlmap, settings, "*", extensions.HTTPIngressPath{"", *ingress.Spec.Backend})
+		if err != nil {
+			hasErrors = true
+			glog.Error(err)
+		}
 	}
 
 	// check each backend to see if there are any specific settings that
 	// need to be set
+	if ingress.Spec.Rules == nil {
+		return nil
+	}
+
 	for _, rule := range ingress.Spec.Rules {
 		host := rule.Host
 
@@ -387,7 +385,7 @@ func (c *Controller) updateBackends(ingress *extensions.Ingress, urlmap *googleV
 	}
 
 	if hasErrors {
-		return e.New("There where errors when sycning settings")
+		return e.New("There where errors when syncing settings")
 	}
 
 	return nil
