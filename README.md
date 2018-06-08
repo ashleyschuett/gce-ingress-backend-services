@@ -38,7 +38,7 @@ spec:
     spec:
       containers:
         - name: gce-backend-service-ingress-controller
-          image: ashleyschuett/gce-ingress-backend-service:v0.0.1
+          image: ashleyschuett/gce-ingress-backend-services:v0.0.2
           imagePullPolicy: IfNotPresent
 ```
 

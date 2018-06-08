@@ -2,7 +2,7 @@
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
-  name: test
+  name: ghost
   annotations:
      cloud.google.com/service-settings: |
        {
@@ -12,5 +12,5 @@ metadata:
        }
 spec:
   backend:
-    serviceName: ghost-gce
+    serviceName: ghost
     servicePort: 2368
